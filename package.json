@@ -1,0 +1,49 @@
+{
+  "name": "zyf-blog",
+  "version": "0.1.0",
+  "private": true,
+  "engines": {
+    "node": "22.x"
+  },
+  "scripts": {
+    "dev": "vinext dev",
+    "prebuild": "npm run content:check",
+    "build": "NITRO_PRESET=vercel vite build && node scripts/check-vercel-output.mjs",
+    "build:test": "vinext build",
+    "content:check": "node scripts/check-content.mjs",
+    "test": "npm run content:check && npm run build:test && node --test tests/rendered-html.test.mjs",
+    "lint": "eslint . --ignore-pattern dist --ignore-pattern .next --ignore-pattern .vercel"
+  },
+  "dependencies": {
+    "@fontsource/caveat": "^5.3.0",
+    "@mdx-js/rollup": "^3.1.1",
+    "@next/mdx": "^16.2.6",
+    "@vitejs/plugin-react": "6.0.2",
+    "@vitejs/plugin-rsc": "^0.5.34",
+    "github-slugger": "^2.0.0",
+    "nitro": "^3.0.260610-beta",
+    "react": "^19.2.8",
+    "react-dom": "^19.2.8",
+    "react-server-dom-webpack": "^19.2.8",
+    "rehype-slug": "^6.0.0",
+    "remark-gfm": "^4.0.1",
+    "vinext": "^1.0.0-beta.8",
+    "vite": "^8.2.2",
+    "yaml": "^2.9.0"
+  },
+  "devDependencies": {
+    "@eslint/js": "9.39.4",
+    "@next/eslint-plugin-next": "16.2.6",
+    "@types/node": "22.19.19",
+    "@types/react": "19.2.14",
+    "@types/react-dom": "19.2.3",
+    "eslint": "9.39.4",
+    "eslint-plugin-jsx-a11y": "6.10.2",
+    "eslint-plugin-react": "7.37.5",
+    "eslint-plugin-react-hooks": "7.1.1",
+    "globals": "16.4.0",
+    "typescript": "5.9.3",
+    "typescript-eslint": "8.59.3"
+  },
+  "type": "module"
+}
