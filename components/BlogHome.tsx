@@ -14,7 +14,7 @@ export function BlogHome({ articles }: { articles: ArticleSummary[] }) {
       <main className="curated-home page-frame">
         <section className="home-hero" aria-labelledby="home-title">
           <div className="home-hero-copy">
-            <h1 id="home-title">Hi, I&apos;m <span className="home-script-name">ylt</span><span className="home-wave" aria-hidden="true">👋</span></h1>
+            <h1 id="home-title">Hi, I&apos;m <span className="home-script-name">ylt</span><span className="home-wave" aria-hidden="true">💜</span></h1>
             <p className="home-hero-role">Java Backend Engineer</p>
             <p className="home-hero-focus">Working across <TypewriterLine /></p>
             <div className="home-hero-actions">

@@ -5,7 +5,6 @@ import { useCallback, useEffect, useRef, useState } from "react";
 
 export const PROFILE_IMAGES = [
   "/images/profile/542f2747a1c496e0825549c3d34bcd1f.jpg",
-  "/images/profile/d821bc400e969f20c3fd54a58dfd2674.jpg",
 ] as const;
 
 const AUTO_PLAY_INTERVAL = 3600;
@@ -67,6 +66,7 @@ export function ProfileCarousel({ variant = "hero" }: { variant?: "hero" | "abou
         ))}
       </div>
 
+      {count > 1 ? (
       <div className="profile-carousel-dots" role="tablist" aria-label="切换照片">
         {PROFILE_IMAGES.map((src, imageIndex) => (
           <button
@@ -80,6 +80,7 @@ export function ProfileCarousel({ variant = "hero" }: { variant?: "hero" | "abou
           />
         ))}
       </div>
+      ) : null}
     </div>
   );
 }

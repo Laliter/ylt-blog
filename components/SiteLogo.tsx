@@ -8,9 +8,9 @@ function LogoMark() {
     >
       <path
         className="logo-part logo-signature"
-        d="M10 14c8-6 19-7 26-4-5 6-16 11-22 18-2 3 0 5 4 3 8-3 15-7 20-4 3 1 4 4 0 6"
+        d="M10 13c5 6 9 10 14 14 5-4 9-9 13-14M24 27c-2 5-5 9-10 12"
       />
-      <circle className="logo-dot" cx="34" cy="24" r="2.5" />
+      <circle className="logo-dot" cx="20" cy="40" r="2.5" />
     </svg>
   );
 }
