@@ -19,7 +19,7 @@ const themeInitializer = `
     };
 
     try {
-      const savedTheme = localStorage.getItem("zyf-theme");
+      const savedTheme = localStorage.getItem("ylt-theme");
       document.documentElement.dataset.theme = savedTheme === "dark" ? "dark" : "light";
     } catch {
       document.documentElement.dataset.theme = "light";
@@ -38,7 +38,7 @@ const themeInitializer = `
       const nextTheme = document.documentElement.dataset.theme === "dark" ? "light" : "dark";
       document.documentElement.dataset.theme = nextTheme;
       try {
-        localStorage.setItem("zyf-theme", nextTheme);
+        localStorage.setItem("ylt-theme", nextTheme);
       } catch {}
       syncThemeControl();
     });
@@ -50,19 +50,19 @@ export const metadata: Metadata = {
     icon: [{ url: "/favicon.svg", type: "image/svg+xml" }],
     shortcut: "/favicon.svg",
   },
-  title: { default: "ZYF｜工程实践与长期记录", template: "%s｜ZYF" },
-  description: "关于 Agent Engineering、开发工具与真实交付的长期记录。",
+  title: { default: "YLT｜Java 后端工程实践", template: "%s｜YLT" },
+  description: "ylt 的个人博客：Java 后端、分布式系统与 AI 工程化的实践与思考。",
   openGraph: {
     type: "website",
     locale: "zh_CN",
-    siteName: "ZYF",
-    title: "ZYF｜工程实践与长期记录",
-    description: "关于 Agent Engineering、开发工具与真实交付的长期记录。",
+    siteName: "YLT",
+    title: "YLT｜Java 后端工程实践",
+    description: "ylt 的个人博客：Java 后端、分布式系统与 AI 工程化的实践与思考。",
   },
   twitter: {
     card: "summary",
-    title: "ZYF｜工程实践与长期记录",
-    description: "关于 Agent Engineering、开发工具与真实交付的长期记录。",
+    title: "YLT｜Java 后端工程实践",
+    description: "ylt 的个人博客：Java 后端、分布式系统与 AI 工程化的实践与思考。",
   },
 };
 

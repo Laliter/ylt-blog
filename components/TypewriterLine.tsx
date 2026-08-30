@@ -2,7 +2,7 @@
 
 import { useEffect, useState } from "react";
 
-const PHRASES = ["Agent Runtime", "AI Open Platform", "MCP Gateway", "AgentTeam"] as const;
+const PHRASES = ["Java & Spring Boot", "Microservice Architecture", "MySQL · Redis · Kafka", "AI-Assisted Engineering"] as const;
 
 export function TypewriterLine() {
   const [phraseIndex, setPhraseIndex] = useState(0);
@@ -34,7 +34,7 @@ export function TypewriterLine() {
 
   return (
     <span className="hero-typewriter">
-      <span className="visually-hidden">Agent Runtime、AI Open Platform、MCP Gateway、AgentTeam。</span>
+      <span className="visually-hidden">Java、Spring Boot、微服务架构、MySQL、Redis、Kafka 与 AI 辅助研发。</span>
       <span aria-hidden="true"><strong>{PHRASES[phraseIndex].slice(0, visibleLength)}</strong><i /></span>
     </span>
   );

@@ -1,6 +1,6 @@
-/* eslint-disable @next/next/no-img-element -- vinext's next/image shim breaks React hooks during hydration. */
 import type { ArticleSummary } from "@/lib/articles";
 import { ArticleCard } from "@/components/ArticleCard";
+import { ProfileCarousel } from "@/components/ProfileCarousel";
 import { SiteHeader } from "@/components/SiteHeader";
 import { TypewriterLine } from "@/components/TypewriterLine";
 
@@ -14,8 +14,8 @@ export function BlogHome({ articles }: { articles: ArticleSummary[] }) {
       <main className="curated-home page-frame">
         <section className="home-hero" aria-labelledby="home-title">
           <div className="home-hero-copy">
-            <h1 id="home-title">Hi, I&apos;m <span className="home-script-name">ZYF</span><span className="home-wave" aria-hidden="true">👋</span></h1>
-            <p className="home-hero-role">Agent Infra Engineer In Alibaba</p>
+            <h1 id="home-title">Hi, I&apos;m <span className="home-script-name">ylt</span><span className="home-wave" aria-hidden="true">👋</span></h1>
+            <p className="home-hero-role">Java Backend Engineer</p>
             <p className="home-hero-focus">Working across <TypewriterLine /></p>
             <div className="home-hero-actions">
               <a className="home-primary-link" href="/about">About <span aria-hidden="true">→</span></a>
@@ -23,10 +23,10 @@ export function BlogHome({ articles }: { articles: ArticleSummary[] }) {
             </div>
           </div>
 
-          <div className="home-profile" aria-label="ZYF 个人标识">
+          <div className="home-profile" aria-label="ylt 个人标识">
             <span className="home-profile-ring" aria-hidden="true" />
             <div className="home-profile-avatar-frame">
-              <img className="home-profile-avatar" src="/images/profile/zyf.jpg" alt="ZYF" />
+              <ProfileCarousel />
             </div>
           </div>
         </section>
@@ -40,7 +40,7 @@ export function BlogHome({ articles }: { articles: ArticleSummary[] }) {
           {latestArticles.length ? (
             <div className="home-latest-list">
               {latestArticles.map((article) => (
-                <ArticleCard article={article} key={article.slug} />
+                <ArticleCard article={article} key={article.slug} showImage={false} />
               ))}
             </div>
           ) : (

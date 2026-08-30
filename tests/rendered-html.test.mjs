@@ -16,26 +16,27 @@ test("server-renders the editorial home without database content", async () => {
   assert.match(response.headers.get("content-type") ?? "", /^text\/html\b/i);
 
   const html = await response.text();
-  assert.match(html, /<title>ZYF｜工程实践与长期记录<\/title>/i);
-  assert.match(html, /ZYF/);
+  assert.match(html, /<title>YLT｜Java 后端工程实践<\/title>/i);
+  assert.match(html, /YLT/);
   assert.match(html, /Hi, I/);
-  assert.match(html, /home-script-name[^>]*>ZYF/);
-  assert.match(html, /Agent Infra Engineer In Alibaba/);
-  assert.match(html, /Agent Runtime/);
-  assert.match(html, /AI Open Platform/);
-  assert.match(html, /MCP Gateway/);
-  assert.match(html, /AgentTeam/);
+  assert.match(html, /home-script-name[^>]*>ylt/);
+  assert.match(html, /Java Backend Engineer/);
+  assert.match(html, /Java &amp; Spring Boot/);
+  assert.match(html, /Java、Spring Boot、微服务架构/);
+  assert.match(html, /MySQL、Redis、Kafka 与 AI 辅助研发/);
   assert.match(html, /Latest Updates/);
   assert.match(html, />About <span[^>]*>→<\/span><\/a>/);
   assert.match(html, />Blog <span[^>]*>→<\/span><\/a>/);
   assert.match(html, /aria-label="主导航"/);
   assert.match(html, />Home<|>Blog<|>About</);
-  assert.match(html, /images\/profile\/zyf\.jpg/);
+  assert.match(html, /images\/profile\//);
+  assert.match(html, /profile-carousel-track/);
+  assert.doesNotMatch(html, /article-card-image/);
   assert.doesNotMatch(html, /site-logo-wordmark|site-global-search|>首页</);
   assert.match(html, /href="\/posts"/);
   assert.match(html, /href="\/about"/);
   assert.equal((html.match(/class="article-card-row"/g) ?? []).length, 3);
-  assert.doesNotMatch(html, /ZYF Notes|全部标签|标签/);
+  assert.doesNotMatch(html, /YLT Notes|全部标签|标签/);
   assert.doesNotMatch(html, /codex-preview|react-loading-skeleton|Your site is taking shape/i);
 });
 
@@ -67,6 +68,7 @@ test("uses repository MDX as the only publishing source", async () => {
   assert.doesNotMatch(explorerSource, /activeTag|tagCounts|Search Topics/);
   assert.match(homeSource, /slice\(0, 3\)/);
   assert.match(homeSource, /<ArticleCard/);
+  assert.match(homeSource, /showImage=\{false\}/);
   assert.match(explorerSource, /<ArticleCard/);
   assert.match(cardSource, /article-card-tags/);
   assert.doesNotMatch(cardSource, /author|avatar|readTime|readingTime/);
@@ -79,8 +81,8 @@ test("uses repository MDX as the only publishing source", async () => {
   assert.doesNotMatch(headerSource, /site-global-search|搜索文章/);
   assert.match(headerSource, /<ThemeToggle/);
   assert.doesNotMatch(themeSource, /["']use client["']|localStorage|onClick/);
-  assert.match(layoutSource, /localStorage\.getItem\("zyf-theme"/);
-  assert.match(layoutSource, /localStorage\.setItem\("zyf-theme"/);
+  assert.match(layoutSource, /localStorage\.getItem\("ylt-theme"/);
+  assert.match(layoutSource, /localStorage\.setItem\("ylt-theme"/);
   assert.match(baseStyles, /:root\[data-theme="dark"\]/);
   assert.match(baseStyles, /\.site-header \{[\s\S]*?position: relative;/);
   assert.doesNotMatch(baseStyles.match(/\.site-header \{[\s\S]*?\n\}/)?.[0] ?? "", /position: sticky|position: fixed/);
@@ -115,11 +117,11 @@ test("renders the release-ready About page with confirmed identity and domains",
   const response = await render("/about");
   assert.equal(response.status, 200);
   const html = await response.text();
-  assert.match(html, /Agent Infra Engineer at Alibaba/);
-  assert.match(html, /Agent Runtime/);
-  assert.match(html, /AI Open Platform/);
-  assert.match(html, /MCP Gateway/);
-  assert.match(html, /AgentTeam/);
+  assert.match(html, /Java 后端开发工程师/);
+  assert.match(html, /阿里巴巴/);
+  assert.match(html, /台州学院/);
+  assert.match(html, /Spring AI/);
+  assert.match(html, /profile-carousel-track/);
   assert.doesNotMatch(html, /目前关注|文章、分享与笔记/);
 });
 

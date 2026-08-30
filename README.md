@@ -1,6 +1,6 @@
-# ZYF Blog
+# YLT Blog
 
-ZYF 的个人技术博客，主要记录 Agent Infra、Agent Runtime、AI Open Platform、MCP Gateway 与 AgentTeam 的工程实践。
+ylt 的个人技术博客，主要记录 Java 后端、分布式系统、微服务架构与 AI 工程化的实践与思考。
 
 内容与代码存放在同一个 Git 仓库中：文章使用 MDX，图片使用仓库静态资源，GitHub 保存版本历史，Vercel 在生产分支更新后自动构建站点。项目不依赖数据库、对象存储或第三方 CMS。
 
@@ -152,7 +152,7 @@ UI 修改还应在本地浏览器检查首页、Archive、About、文章页，�
 
 ## 发布
 
-仓库远端为 [zyfn/zyf-blog](https://github.com/zyfn/zyf-blog)。Vercel 项目连接 GitHub 后：
+仓库远端为 [Laliter/ylt-blog](https://github.com/Laliter/ylt-blog)。Vercel 项目连接 GitHub 后：
 
 - 推送普通分支会生成 Preview Deployment；
 - 推送生产分支会触发正式构建；

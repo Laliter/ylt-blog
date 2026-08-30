@@ -4,17 +4,23 @@ import type { ArticleSummary } from "@/lib/articles";
 type ArticleCardProps = {
   article: ArticleSummary;
   headingLevel?: "h2" | "h3";
+  showImage?: boolean;
 };
 
-export function ArticleCard({ article, headingLevel = "h3" }: ArticleCardProps) {
+export function ArticleCard({ article, headingLevel = "h3", showImage = true }: ArticleCardProps) {
   const Heading = headingLevel;
 
   return (
     <article className="article-card-row">
-      <a className="article-card-link" href={`/posts/${article.slug}`}>
-        <span className="article-card-image" aria-hidden="true">
-          {article.coverImage ? <img alt="" loading="lazy" src={article.coverImage} /> : <span />}
-        </span>
+      <a
+        className={showImage ? "article-card-link" : "article-card-link article-card-link--text"}
+        href={`/posts/${article.slug}`}
+      >
+        {showImage ? (
+          <span className="article-card-image" aria-hidden="true">
+            {article.coverImage ? <img alt="" loading="lazy" src={article.coverImage} /> : <span />}
+          </span>
+        ) : null}
         <div className="article-card-copy">
           <div className="article-card-meta">
             <time>{article.updated}</time>

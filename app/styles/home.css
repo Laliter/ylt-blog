@@ -180,6 +180,68 @@
   width: 100%;
 }
 
+.profile-carousel {
+  height: 100%;
+  overflow: hidden;
+  position: relative;
+  width: 100%;
+}
+
+.profile-carousel-track {
+  display: flex;
+  height: 100%;
+  transition: transform 640ms var(--ease-fluid);
+  width: 100%;
+}
+
+.profile-carousel-track img {
+  flex: 0 0 100%;
+  height: 100%;
+  min-width: 100%;
+  object-fit: cover;
+  object-position: 50% 25%;
+  width: 100%;
+}
+
+.profile-carousel-dots {
+  align-items: center;
+  bottom: 15px;
+  display: flex;
+  gap: 7px;
+  justify-content: center;
+  left: 50%;
+  position: absolute;
+  transform: translateX(-50%);
+  z-index: 2;
+}
+
+.profile-carousel-dots button {
+  appearance: none;
+  background: color-mix(in srgb, var(--surface), transparent 35%);
+  border: 0;
+  border-radius: 999px;
+  cursor: pointer;
+  height: 8px;
+  padding: 0;
+  transition: width 240ms var(--ease-fluid), background-color 240ms var(--ease-fluid);
+  width: 8px;
+}
+
+.profile-carousel-dots button:hover {
+  background: var(--text-muted);
+}
+
+.profile-carousel-dots button.is-active {
+  background: var(--accent);
+  width: 22px;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .profile-carousel-track {
+    transition: none;
+  }
+}
+
 .home-latest {
   padding-top: 6px;
 }
@@ -247,6 +309,10 @@
   transform-origin: center;
   transition: background-color 340ms var(--ease-fluid), border-color 340ms var(--ease-fluid), box-shadow 420ms var(--ease-fluid), transform 360ms var(--ease-fluid);
   will-change: transform;
+}
+
+.article-card-link--text {
+  grid-template-columns: 1fr;
 }
 
 .article-card-link::before {
