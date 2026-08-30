@@ -2,7 +2,10 @@ import { isAdminRequest } from "@/lib/admin-auth";
 import { githubConfigured, isAllowedImage, publishToGitHub, safeImageName, type PublishImage } from "@/lib/github-publish";
 
 const SLUG_PATTERN = /^[a-z0-9]+(-[a-z0-9]+)*$/;
-const MAX_IMAGE_BYTES = 5 * 1024 * 1024;
+// 单图原始大小上限：base64 编码后体积约为原始的 4/3，需低于 Vercel 请求体上限 4.5MB。
+const MAX_IMAGE_BYTES = 3 * 1024 * 1024;
+// 图片 base64 总量 + 正文之和的上限，留出余量避开 Vercel 4.5MB 请求体限制。
+const MAX_TOTAL_PAYLOAD_BYTES = 4.3 * 1024 * 1024;
 
 function text(form: FormData, key: string) {
   const value = form.get(key);
@@ -63,7 +66,7 @@ export async function POST(request: Request) {
   try {
     if (cover instanceof File && cover.size > 0) {
       if (cover.size > MAX_IMAGE_BYTES) {
-        return Response.json({ error: "封面图超过 5MB" }, { status: 400 });
+        return Response.json({ error: "封面图超过 3MB，请压缩后重试" }, { status: 400 });
       }
       const extension = cover.name.match(/\.([a-z0-9]+)$/i)?.[1]?.toLowerCase() ?? "webp";
       const path = `public/images/posts/${slug}/cover.${extension}`;
@@ -76,9 +79,17 @@ export async function POST(request: Request) {
         return Response.json({ error: `图片格式不支持：${image.name}` }, { status: 400 });
       }
       if (image.size > MAX_IMAGE_BYTES) {
-        return Response.json({ error: `图片超过 5MB：${image.name}` }, { status: 400 });
+        return Response.json({ error: `图片超过 3MB，请压缩后重试：${image.name}` }, { status: 400 });
       }
       images.push(await toPublishImage(image, `public/images/posts/${slug}/${safeImageName(image.name)}`));
+    }
+
+    const totalPayload = images.reduce((sum, image) => sum + image.base64.length, 0) + body.length;
+    if (totalPayload > MAX_TOTAL_PAYLOAD_BYTES) {
+      return Response.json(
+        { error: "图片总量过大：所有图片加正文编码后约需低于 4.3MB（Vercel 请求体上限），请减少图片或压缩后重试" },
+        { status: 400 },
+      );
     }
   } catch {
     return Response.json({ error: "读取上传文件失败" }, { status: 400 });

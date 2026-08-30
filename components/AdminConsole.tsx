@@ -12,6 +12,24 @@ function slugify(value: string) {
     .replace(/^-+|-+$/g, "");
 }
 
+// 与服务端保持一致：单图 3MB；base64 后总量约 4/3，需低于 Vercel 4.5MB 请求体上限。
+const MAX_IMAGE_BYTES = 3 * 1024 * 1024;
+const MAX_TOTAL_BYTES = 4.3 * 1024 * 1024;
+
+async function readErrorMessage(response: Response) {
+  const raw = await response.text().catch(() => "");
+  try {
+    const parsed = JSON.parse(raw) as { error?: string };
+    if (parsed.error) return parsed.error;
+  } catch {
+    // 服务端可能返回纯文本错误（如 413 Payload Too Large），走状态码兜底。
+  }
+  if (response.status === 413) {
+    return "请求体过大：请压缩图片后重试（单张 ≤ 3MB，图片总量编码后 ≤ 4MB）";
+  }
+  return `请求失败（${response.status}）`;
+}
+
 export function AdminConsole() {
   const [phase, setPhase] = useState<Phase>("checking");
   const [password, setPassword] = useState("");
@@ -74,6 +92,20 @@ export function AdminConsole() {
     setResult(null);
     setBusy(true);
     try {
+      const files = [cover, ...(images ? Array.from(images) : [])].filter(
+        (file): file is File => file instanceof File && file.size > 0,
+      );
+      for (const file of files) {
+        if (file.size > MAX_IMAGE_BYTES) {
+          throw new Error(`图片超过 3MB，请压缩后重试：${file.name}`);
+        }
+      }
+      const estimatedBytes =
+        files.reduce((sum, file) => sum + Math.ceil(file.size / 3) * 4, 0) + body.length;
+      if (estimatedBytes > MAX_TOTAL_BYTES) {
+        throw new Error("图片总量过大：所有图片编码后加正文需低于 4.3MB，请减少图片或压缩后重试");
+      }
+
       const form = new FormData();
       form.set("title", title);
       form.set("slug", effectiveSlug);
@@ -85,8 +117,8 @@ export function AdminConsole() {
       if (images) for (const image of Array.from(images)) form.append("images", image);
 
       const response = await fetch("/api/admin/publish", { method: "POST", body: form });
-      const data = (await response.json()) as Partial<PublishResult> & { error?: string };
-      if (!response.ok) throw new Error(data.error ?? "发布失败");
+      if (!response.ok) throw new Error(await readErrorMessage(response));
+      const data = JSON.parse(await response.text()) as Partial<PublishResult> & { error?: string };
 
       setResult({ ...data, draft } as PublishResult);
       formRef.current?.reset();
