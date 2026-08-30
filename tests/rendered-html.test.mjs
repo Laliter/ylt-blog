@@ -1,5 +1,5 @@
 import assert from "node:assert/strict";
-import { access, readFile } from "node:fs/promises";
+import { access, readdir, readFile } from "node:fs/promises";
 import test from "node:test";
 
 async function render(pathname = "/") {
@@ -8,6 +8,20 @@ async function render(pathname = "/") {
   const { default: handler } = await import(workerUrl.href);
 
   return handler(new Request(`http://localhost${pathname}`, { headers: { accept: "text/html" } }));
+}
+
+// 统计 content/posts 中的非草稿文章数，与生产构建的 Archive 行为保持一致。
+async function countPublishedPosts() {
+  const dirUrl = new URL("../content/posts/", import.meta.url);
+  const names = (await readdir(dirUrl)).filter((name) => name.endsWith(".mdx"));
+  const flags = await Promise.all(
+    names.map(async (name) => {
+      const source = await readFile(new URL(name, dirUrl), "utf8");
+      const frontmatter = source.match(/^---\r?\n([\s\S]*?)\r?\n---/);
+      return frontmatter !== null && /^draft:\s*true\s*$/m.test(frontmatter[1]) ? 0 : 1;
+    }),
+  );
+  return flags.reduce((sum, flag) => sum + flag, 0);
 }
 
 test("server-renders the editorial home without database content", async () => {
@@ -91,7 +105,7 @@ test("uses repository MDX as the only publishing source", async () => {
   assert.match(tocSource, /<details[\s\S]*?open/);
   assert.match(tocSource, /<summary/);
   assert.match(contentStyles, /\.article-layout:has\(\.article-toc:not\(\[open\]\)\)/);
-  assert.doesNotMatch(postPageSource, /<span>ZYF<\/span>/);
+  assert.doesNotMatch(postPageSource, /<span>YLT<\/span>/);
   assert.ok(postPageSource.indexOf('className="post-hero-meta"') > postPageSource.indexOf('className="post-byline"'));
   assert.match(readme, /content\/posts\/<slug>\.mdx/);
   assert.doesNotMatch(packageJson, /drizzle|libsql|vercel\/blob|db:generate|tailwind/);
@@ -107,7 +121,7 @@ test("renders a global-search archive without sidebar filters", async () => {
   const html = await response.text();
   assert.match(html, /Search the archive/);
   assert.match(html, /<h1>Archive<\/h1>/);
-  assert.equal((html.match(/class="article-card-row"/g) ?? []).length, 4);
+  assert.equal((html.match(/class="article-card-row"/g) ?? []).length, await countPublishedPosts());
   assert.doesNotMatch(html, /<span>Archive<\/span>|<h1>Blog<\/h1>/);
   assert.doesNotMatch(html, /搜索标题或摘要|<h1>文章<\/h1>/);
   assert.doesNotMatch(html, /topics-header|topic-grid|Blog categories|Articles \(|Shares \(|Notes \(/);
