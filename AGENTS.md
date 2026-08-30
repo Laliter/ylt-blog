@@ -9,15 +9,16 @@
 - `/`：个人介绍与最近发布的 3 篇文章；
 - `/posts`：全部公开文章与标题、摘要、标签搜索；
 - `/posts/<slug>`：MDX 正文、标签、更新时间和可折叠阅读目录；
-- `/about`：简洁的职业介绍。
+- `/about`：简洁的职业介绍；
+- `/admin`：管理员登录与文章发布台（不进入公开导航，`noindex`）。
 
-除非用户明确改变产品范围，不新增控制台、后台管理、分类系统、评论、登录、数据库、CMS、对象存储、统计平台或新的一级栏目。文章与图片继续使用 Git 仓库作为唯一来源。
+`/admin` 是唯一获准的管理入口：密码登录（环境变量 `ADMIN_TOKEN`，HMAC 签名 cookie 会话），发布动作通过 GitHub Contents API 把 MDX 与图片写入本仓库，Git 仍是唯一内容来源；发布生效依赖 Vercel Git 集成在 push 后自动部署。除 `/admin` 外，除非用户明确改变产品范围，不新增控制台、后台管理、分类系统、评论、登录、数据库、CMS、对象存储、统计平台或新的一级栏目。文章与图片继续使用 Git 仓库作为唯一来源。
 
 ## 2. 技术与架构
 
 - 使用 Vinext、Vite、Nitro 承载现有 Next.js App Router 编程模型，不迁移框架。
 - 使用 React 19 与严格 TypeScript。页面和数据读取默认使用服务端组件。
-- 只有需要 React 浏览器状态的组件才添加 `"use client"`，当前仅限搜索和打字机。主题切换使用根布局的原生事件脚本，目录折叠使用原生 `<details>`，避免增加 Vinext 的 RSC Client Reference。
+- 只有需要 React 浏览器状态的组件才添加 `"use client"`，当前仅限搜索、打字机和 `/admin` 发布台（`components/AdminConsole.tsx`）。主题切换使用根布局的原生事件脚本，目录折叠使用原生 `<details>`，避免增加 Vinext 的 RSC Client Reference。
 - `content/posts` 是唯一文章源。`lib/blog.ts` 通过 `import.meta.glob` 同时读取原始 frontmatter 与已编译 MDX，不引入第二套内容状态。
 - Markdown 使用 MDX、`remark-gfm` 与 `rehype-slug`。共享组件统一注册在 `components/MdxArticle.tsx`。
 - 生产构建通过 Nitro 输出到 Vercel，构建入口以 `vercel.json` 为准。
@@ -51,7 +52,8 @@
 
 - `app/styles/base.css`：设计令牌、全局重置、页面背景、导航、主题与无障碍媒体查询；
 - `app/styles/home.css`：首页 Hero 与共用文章卡片；
-- `app/styles/content.css`：Archive、About、文章头部、目录和 MDX 正文。
+- `app/styles/content.css`：Archive、About、文章头部、目录和 MDX 正文；
+- `app/styles/admin.css`：`/admin` 登录与发布台。
 
 规则应放到最窄的归属文件。优先复用 CSS 变量；可复用表面必须成对提供浅色与暗色令牌，不随意硬编码新颜色和阴影。
 
