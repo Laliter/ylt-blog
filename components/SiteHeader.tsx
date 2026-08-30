@@ -15,7 +15,10 @@ export function SiteHeader({ active }: { active?: SiteSection }) {
           <a aria-current={active === "articles" ? "page" : undefined} href="/posts">Blog</a>
           <a aria-current={active === "about" ? "page" : undefined} href="/about">About</a>
         </nav>
-        <ThemeToggle />
+        <div className="header-actions">
+          <SocialLinks />
+          <ThemeToggle />
+        </div>
       </div>
     </header>
   );
