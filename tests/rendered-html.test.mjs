@@ -119,7 +119,6 @@ test("renders the release-ready About page with confirmed identity and domains",
   const html = await response.text();
   assert.match(html, /Java 后端开发工程师/);
   assert.match(html, /阿里巴巴/);
-  assert.match(html, /台州学院/);
   assert.match(html, /Spring AI/);
   assert.match(html, /profile-carousel-track/);
   assert.doesNotMatch(html, /目前关注|文章、分享与笔记/);

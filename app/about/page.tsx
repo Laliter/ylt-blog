@@ -26,7 +26,7 @@ export default function AboutPage() {
 
           <div className="about-story">
             <p>
-              我是 ylt（余丽婷），一名 Java 后端开发工程师，目前在阿里巴巴集团参与核心业务系统的设计与研发。
+              我是 ylt，一名 Java 后端开发工程师，目前在阿里巴巴集团参与核心业务系统的设计与研发。
               2017 年入行，先后经历大搜车与阿里巴巴，业务足迹覆盖交易、采购、跨境出行与数据平台。
             </p>
             <p>
