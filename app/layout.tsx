@@ -46,6 +46,58 @@ const themeInitializer = `
   })();
 `;
 
+const copyHandler = `
+  (() => {
+    const COPIED_LABEL = "已复制";
+    const timers = new WeakMap();
+
+    document.addEventListener("click", (event) => {
+      const target = event.target;
+      if (!(target instanceof Element)) return;
+      const button = target.closest("[data-copy]");
+      if (!(button instanceof HTMLElement)) return;
+
+      const value = button.getAttribute("data-copy") ?? "";
+      if (!value) return;
+
+      const original = button.dataset.tooltipOriginal ?? button.getAttribute("data-tooltip") ?? "";
+      button.dataset.tooltipOriginal = original;
+
+      const showCopied = () => {
+        button.setAttribute("data-tooltip", COPIED_LABEL);
+        button.dataset.copied = "true";
+        const timer = timers.get(button);
+        if (timer) clearTimeout(timer);
+        timers.set(button, setTimeout(() => {
+          button.setAttribute("data-tooltip", original);
+          delete button.dataset.copied;
+        }, 1600));
+      };
+
+      const fallbackCopy = () => {
+        const textarea = document.createElement("textarea");
+        textarea.value = value;
+        textarea.setAttribute("readonly", "");
+        textarea.style.position = "fixed";
+        textarea.style.opacity = "0";
+        document.body.appendChild(textarea);
+        textarea.select();
+        try {
+          document.execCommand("copy");
+          showCopied();
+        } catch {}
+        textarea.remove();
+      };
+
+      if (navigator.clipboard && navigator.clipboard.writeText) {
+        navigator.clipboard.writeText(value).then(showCopied, fallbackCopy);
+      } else {
+        fallbackCopy();
+      }
+    });
+  })();
+`;
+
 export const metadata: Metadata = {
   icons: {
     icon: [{ url: "/favicon.svg", type: "image/svg+xml" }],
@@ -72,6 +124,7 @@ export default function RootLayout({ children }: Readonly<{ children: React.Reac
     <html lang="zh-CN" suppressHydrationWarning>
       <head>
         <script dangerouslySetInnerHTML={{ __html: themeInitializer }} />
+        <script dangerouslySetInnerHTML={{ __html: copyHandler }} />
       </head>
       <body className={`${geistSans.variable} ${geistMono.variable}`}>{children}</body>
     </html>
