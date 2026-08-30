@@ -43,7 +43,7 @@ export default function AboutPage() {
               Kafka / MetaQ、Flink 实时计算与 Hive 离线数仓。
             </p>
             <p>
-              教育背景：台州学院 · 计算机科学与技术（本科，专业前 3%）。邮箱：395662401@qq.com。
+              邮箱：395662401@qq.com。
             </p>
           </div>
         </section>

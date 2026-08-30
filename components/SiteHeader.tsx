@@ -1,4 +1,5 @@
 import { SiteLogo } from "@/components/SiteLogo";
+import { SocialLinks } from "@/components/SocialLinks";
 import { ThemeToggle } from "@/components/ThemeToggle";
 
 type SiteSection = "home" | "articles" | "about";
