@@ -337,17 +337,11 @@
   overflow: hidden;
 }
 
-.article-card-image img,
-.article-card-image > span {
+.article-card-image img {
   height: 100%;
   object-fit: cover;
   transition: transform 560ms var(--ease-fluid);
   width: 100%;
-}
-
-.article-card-image > span {
-  background: color-mix(in srgb, var(--surface-soft), var(--surface) 40%);
-  display: block;
 }
 
 .article-card-row:hover .article-card-image img {

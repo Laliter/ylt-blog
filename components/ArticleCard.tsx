@@ -9,16 +9,17 @@ type ArticleCardProps = {
 
 export function ArticleCard({ article, headingLevel = "h3", showImage = true }: ArticleCardProps) {
   const Heading = headingLevel;
+  const hasImage = showImage && Boolean(article.coverImage);
 
   return (
     <article className="article-card-row">
       <a
-        className={showImage ? "article-card-link" : "article-card-link article-card-link--text"}
+        className={hasImage ? "article-card-link" : "article-card-link article-card-link--text"}
         href={`/posts/${article.slug}`}
       >
-        {showImage ? (
+        {hasImage ? (
           <span className="article-card-image" aria-hidden="true">
-            {article.coverImage ? <img alt="" loading="lazy" src={article.coverImage} /> : <span />}
+            <img alt="" loading="lazy" src={article.coverImage} />
           </span>
         ) : null}
         <div className="article-card-copy">
